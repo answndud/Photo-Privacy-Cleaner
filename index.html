@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📷 EXIF Viewer & Remover</title>
+    <title>EXIF Viewer & Remover</title>
     <script src="https://cdn.jsdelivr.net/npm/exif-js@2.3.0/exif.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
@@ -813,19 +813,235 @@
                 flex-direction: column;
             }
         }
+
+        /* Minimal light interface */
+        :root, [data-theme="light"] {
+            --bg-primary: #f7f8f8;
+            --bg-secondary: #f0f2f2;
+            --bg-tertiary: #e7ebeb;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --text-primary: #111416;
+            --text-secondary: #4f5b61;
+            --text-muted: #7b878c;
+            --accent-primary: #0f766e;
+            --accent-secondary: #0f766e;
+            --accent-glow: rgba(15, 118, 110, 0.08);
+            --warning: #9a6700;
+            --warning-bg: #fff8e6;
+            --error: #b42318;
+            --error-bg: #fff1f0;
+            --success: #157f3b;
+            --success-bg: #eef9f0;
+            --border: #d9dedf;
+            --border-hover: #b8c2c6;
+            --shadow-glow: 0 1px 2px rgba(17, 20, 22, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #101314;
+            --bg-secondary: #171b1d;
+            --bg-tertiary: #202628;
+            --bg-card: rgba(24, 28, 30, 0.92);
+            --text-primary: #f2f4f4;
+            --text-secondary: #b4bdc1;
+            --text-muted: #7f8b91;
+            --accent-primary: #72d6c9;
+            --accent-secondary: #72d6c9;
+            --accent-glow: rgba(114, 214, 201, 0.08);
+            --warning: #e0b85f;
+            --warning-bg: #2a261b;
+            --error: #ffb4ab;
+            --error-bg: #2b1c1c;
+            --success: #8bd39a;
+            --success-bg: #172719;
+            --border: #30383c;
+            --border-hover: #465156;
+            --shadow-glow: 0 1px 2px rgba(0, 0, 0, 0.28);
+        }
+
+        body {
+            line-height: 1.5;
+        }
+
+        body::before {
+            display: none;
+        }
+
+        .container {
+            max-width: 1120px;
+            padding: 28px 18px;
+        }
+
+        header {
+            text-align: left;
+            margin-bottom: 22px;
+            padding-top: 0;
+        }
+
+        .logo {
+            margin-bottom: 8px;
+        }
+
+        .logo-icon,
+        .card-header-icon,
+        .upload-icon,
+        .gps-warning-icon,
+        .no-exif-icon,
+        .result-icon,
+        .info-item-icon,
+        .info-section-title span,
+        .exif-category-title span {
+            display: none;
+        }
+
+        h1 {
+            color: var(--text-primary);
+            background: none;
+            -webkit-text-fill-color: currentColor;
+            font-size: clamp(1.45rem, 3vw, 2.05rem);
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+
+        .subtitle {
+            max-width: 620px;
+            margin: 0;
+            font-size: 0.86rem;
+        }
+
+        .theme-toggle {
+            top: 16px;
+            right: 16px;
+            width: auto;
+            height: 34px;
+            min-width: 64px;
+            border-radius: 8px;
+            padding: 0 10px;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+        }
+
+        .theme-toggle:hover {
+            transform: none;
+            border-color: var(--accent-primary);
+        }
+
+        .main-grid {
+            gap: 14px;
+        }
+
+        .card,
+        .info-section {
+            border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(17, 20, 22, 0.06);
+        }
+
+        .card-header {
+            padding: 13px 16px;
+            gap: 0;
+        }
+
+        .card-title,
+        .info-section-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .card-body,
+        .info-section {
+            padding: 16px;
+        }
+
+        .upload-zone {
+            border-width: 1px;
+            border-radius: 10px;
+            padding: 42px 22px;
+            background: var(--bg-secondary);
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            background: var(--accent-glow);
+            transform: none;
+        }
+
+        .image-preview,
+        .image-info,
+        .gps-preview,
+        .gps-coord,
+        .result-section,
+        .comparison-item,
+        .all-exif-toggle,
+        .info-item,
+        .toast,
+        .exif-item {
+            border-radius: 8px;
+        }
+
+        .action-buttons,
+        .exif-actions {
+            gap: 8px;
+        }
+
+        .btn {
+            border-radius: 8px;
+            padding: 0.68rem 1rem;
+            font-size: 0.86rem;
+            transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .btn:hover,
+        .btn-primary:hover:not(:disabled),
+        .btn-danger:hover:not(:disabled) {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        .exif-grid {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+        }
+
+        .exif-category {
+            margin-bottom: 18px;
+        }
+
+        .info-section {
+            margin-top: 14px;
+        }
+
+        .info-list {
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 8px;
+        }
+
+        footer {
+            padding: 22px;
+            font-size: 0.78rem;
+        }
     </style>
 </head>
 <body>
     <div class="toast-container" id="toastContainer"></div>
 
-    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">Light</button>
 
     <canvas id="canvas" style="display: none;"></canvas>
 
     <div class="container">
         <header>
             <div class="logo">
-                <div class="logo-icon">📷</div>
                 <h1>EXIF Viewer & Remover</h1>
             </div>
             <p class="subtitle">
@@ -839,14 +1055,12 @@
             <!-- Left Panel: Image Upload -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-header-icon">🖼️</span>
                     <span class="card-title">이미지 선택</span>
                 </div>
                 <div class="card-body">
                     <div class="upload-zone" id="uploadZone">
                         <input type="file" id="imageInput" accept="image/jpeg,image/jpg,image/png,image/webp,image/tiff">
                         <div class="upload-content">
-                            <div class="upload-icon">📁</div>
                             <div class="upload-text">
                                 <strong>클릭</strong>하거나 이미지를 <strong>드래그</strong>하세요
                             </div>
@@ -876,17 +1090,16 @@
 
                     <div class="action-buttons">
                         <button class="btn btn-secondary" id="clearBtn" disabled>
-                            🗑️ 초기화
+                            초기화
                         </button>
                         <button class="btn btn-danger" id="removeExifBtn" disabled>
-                            🧹 메타데이터 제거
+                            메타데이터 제거
                         </button>
                     </div>
 
                     <div class="result-section" id="resultSection">
                         <div class="result-header">
-                            <span class="result-icon">✅</span>
-                            <span class="result-title">메타데이터 제거 완료!</span>
+                            <span class="result-title">메타데이터 제거 완료</span>
                         </div>
                         <div class="result-comparison">
                             <div class="comparison-item">
@@ -899,7 +1112,7 @@
                             </div>
                         </div>
                         <button class="btn btn-primary" id="downloadBtn">
-                            💾 정리된 이미지 다운로드
+                            정리된 이미지 다운로드
                         </button>
                     </div>
                 </div>
@@ -908,12 +1121,10 @@
             <!-- Right Panel: EXIF Data -->
             <div class="card">
                 <div class="card-header">
-                    <span class="card-header-icon">📋</span>
                     <span class="card-title">EXIF 메타데이터</span>
                 </div>
                 <div class="card-body">
                     <div class="no-exif" id="noExif">
-                        <div class="no-exif-icon">🔍</div>
                         <div class="no-exif-title">이미지를 업로드하세요</div>
                         <p>EXIF 메타데이터를 분석하고 표시합니다</p>
                     </div>
@@ -922,9 +1133,8 @@
                         <!-- GPS Warning -->
                         <div class="gps-preview" id="gpsPreview">
                             <div class="gps-warning">
-                                <span class="gps-warning-icon">⚠️</span>
                                 <div class="gps-warning-text">
-                                    <div class="gps-warning-title">위치 정보가 포함되어 있습니다!</div>
+                                    <div class="gps-warning-title">위치 정보가 포함되어 있습니다</div>
                                     <div class="gps-warning-desc">
                                         이 이미지에는 촬영 위치(GPS 좌표)가 저장되어 있습니다.
                                         공유 전에 반드시 메타데이터를 제거하세요.
@@ -942,14 +1152,14 @@
                                 </div>
                             </div>
                             <a class="gps-link" id="gpsMapLink" href="#" target="_blank">
-                                🗺️ 지도에서 위치 확인
+                                지도에서 위치 확인
                             </a>
                         </div>
 
                         <!-- Camera Info -->
                         <div class="exif-category" id="cameraCategory">
                             <div class="exif-category-title">
-                                <span>📸</span> 카메라 정보
+                                <span></span> 카메라 정보
                             </div>
                             <div class="exif-grid" id="cameraGrid"></div>
                         </div>
@@ -957,7 +1167,7 @@
                         <!-- Date/Time Info -->
                         <div class="exif-category" id="dateCategory">
                             <div class="exif-category-title">
-                                <span>🕐</span> 날짜 및 시간
+                                <span></span> 날짜 및 시간
                             </div>
                             <div class="exif-grid" id="dateGrid"></div>
                         </div>
@@ -965,7 +1175,7 @@
                         <!-- Image Settings -->
                         <div class="exif-category" id="settingsCategory">
                             <div class="exif-category-title">
-                                <span>⚙️</span> 촬영 설정
+                                <span></span> 촬영 설정
                             </div>
                             <div class="exif-grid" id="settingsGrid"></div>
                         </div>
@@ -973,13 +1183,13 @@
                         <!-- EXIF Actions -->
                         <div class="exif-actions">
                             <button class="btn btn-secondary" id="downloadExifMdBtn">
-                                📥 마크다운으로 저장
+                                마크다운으로 저장
                             </button>
                         </div>
 
                         <!-- All EXIF Toggle -->
                         <button class="all-exif-toggle" id="allExifToggle">
-                            <span>📄 전체 메타데이터 보기</span>
+                            <span>전체 메타데이터 보기</span>
                             <span class="icon">▼</span>
                         </button>
                         <div class="all-exif-table" id="allExifTable">
@@ -996,7 +1206,6 @@
                     </div>
 
                     <div class="no-exif" id="noExifFound" style="display: none;">
-                        <div class="no-exif-icon">✨</div>
                         <div class="no-exif-title">메타데이터 없음</div>
                         <p>이 이미지에는 EXIF 메타데이터가 없습니다</p>
                     </div>
@@ -1007,29 +1216,25 @@
         <!-- Info Section -->
         <div class="info-section">
             <div class="info-section-title">
-                <span>💡</span> EXIF 메타데이터란?
+                <span></span> EXIF 메타데이터란?
             </div>
             <div class="info-list">
                 <div class="info-item">
-                    <span class="info-item-icon">📸</span>
                     <div class="info-item-text">
                         <strong>카메라 정보</strong>: 제조사, 모델명, 렌즈 정보 등
                     </div>
                 </div>
                 <div class="info-item">
-                    <span class="info-item-icon">📍</span>
                     <div class="info-item-text">
                         <strong>위치 정보</strong>: GPS 좌표로 촬영 장소 노출 가능
                     </div>
                 </div>
                 <div class="info-item">
-                    <span class="info-item-icon">📅</span>
                     <div class="info-item-text">
                         <strong>시간 정보</strong>: 촬영 날짜, 시간, 시간대
                     </div>
                 </div>
                 <div class="info-item">
-                    <span class="info-item-icon">⚙️</span>
                     <div class="info-item-text">
                         <strong>촬영 설정</strong>: ISO, 셔터 속도, 조리개 등
                     </div>
@@ -1044,7 +1249,7 @@
 
     <script>
         // ============================================
-        // 📷 EXIF Viewer & Remover - Main Application
+        // EXIF Viewer & Remover - Main Application
         // ============================================
 
         // State
@@ -1074,7 +1279,7 @@
         // Theme Management
         // ============================================
         function initTheme() {
-            const savedTheme = localStorage.getItem('exif-theme') || 'dark';
+            const savedTheme = localStorage.getItem('exif-viewer-theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
             updateThemeIcon(savedTheme);
         }
@@ -1083,12 +1288,12 @@
             const current = document.documentElement.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('exif-theme', next);
+            localStorage.setItem('exif-viewer-theme', next);
             updateThemeIcon(next);
         }
 
         function updateThemeIcon(theme) {
-            themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            themeToggle.textContent = theme === 'dark' ? 'Dark' : 'Light';
         }
 
         themeToggle.addEventListener('click', toggleTheme);
@@ -1191,7 +1396,7 @@
             noExif.style.display = 'none';
             noExifFound.style.display = 'block';
             exifSection.classList.remove('visible');
-            removeExifBtn.textContent = '🧹 메타데이터 없음';
+            removeExifBtn.textContent = '메타데이터 없음';
             removeExifBtn.disabled = true;
         }
 
@@ -1401,12 +1606,12 @@
 
         function generateExifMarkdown(data, file) {
             const now = new Date().toLocaleString('ko-KR');
-            let md = `# 📷 EXIF 메타데이터 리포트\n\n`;
+            let md = `# EXIF 메타데이터 리포트\n\n`;
             md += `> 생성일시: ${now}\n\n`;
             md += `---\n\n`;
             
             // File Info
-            md += `## 📁 파일 정보\n\n`;
+            md += `## 파일 정보\n\n`;
             md += `| 항목 | 값 |\n`;
             md += `|------|----|\n`;
             md += `| 파일명 | \`${file.name}\` |\n`;
@@ -1426,7 +1631,7 @@
             ];
             const cameraData = cameraFields.filter(f => data[f.key]);
             if (cameraData.length > 0) {
-                md += `## 📸 카메라 정보\n\n`;
+                md += `## 카메라 정보\n\n`;
                 md += `| 항목 | 값 |\n`;
                 md += `|------|----|\n`;
                 cameraData.forEach(f => {
@@ -1443,7 +1648,7 @@
             ];
             const dateData = dateFields.filter(f => data[f.key]);
             if (dateData.length > 0) {
-                md += `## 🕐 날짜 및 시간\n\n`;
+                md += `## 날짜 및 시간\n\n`;
                 md += `| 항목 | 값 |\n`;
                 md += `|------|----|\n`;
                 dateData.forEach(f => {
@@ -1465,7 +1670,7 @@
             ];
             const settingsData = settingsFields.filter(f => data[f.key] !== undefined);
             if (settingsData.length > 0) {
-                md += `## ⚙️ 촬영 설정\n\n`;
+                md += `## 촬영 설정\n\n`;
                 md += `| 항목 | 값 |\n`;
                 md += `|------|----|\n`;
                 settingsData.forEach(f => {
@@ -1483,8 +1688,8 @@
                 const lat = convertDMSToDD(data.GPSLatitude, data.GPSLatitudeRef);
                 const lng = convertDMSToDD(data.GPSLongitude, data.GPSLongitudeRef);
                 
-                md += `## 📍 GPS 위치 정보\n\n`;
-                md += `> ⚠️ **경고**: 이 이미지에는 촬영 위치가 포함되어 있습니다!\n\n`;
+                md += `## GPS 위치 정보\n\n`;
+                md += `> 경고: 이 이미지에는 촬영 위치가 포함되어 있습니다.\n\n`;
                 md += `| 항목 | 값 |\n`;
                 md += `|------|----|\n`;
                 md += `| 위도 (Latitude) | ${lat.toFixed(6)}° ${data.GPSLatitudeRef || 'N'} |\n`;
@@ -1493,11 +1698,11 @@
                     md += `| 고도 (Altitude) | ${data.GPSAltitude}m |\n`;
                 }
                 md += `\n`;
-                md += `🗺️ [Google Maps에서 보기](https://www.google.com/maps?q=${lat},${lng})\n\n`;
+                md += `[Google Maps에서 보기](https://www.google.com/maps?q=${lat},${lng})\n\n`;
             }
             
             // All EXIF Data
-            md += `## 📄 전체 메타데이터\n\n`;
+            md += `## 전체 메타데이터\n\n`;
             md += `| 태그 | 값 |\n`;
             md += `|------|----|\n`;
             
@@ -1508,7 +1713,7 @@
                 if (value !== undefined && value !== null && value !== '') {
                     const displayValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
                     const escapedValue = displayValue.replace(/\|/g, '\\|').replace(/\n/g, ' ');
-                    const marker = sensitiveKeys.includes(key) ? ' ⚠️' : '';
+                    const marker = sensitiveKeys.includes(key) ? ' *' : '';
                     md += `| ${key}${marker} | ${escapedValue} |\n`;
                 }
             });
@@ -1526,7 +1731,7 @@
             if (!currentImage) return;
             
             removeExifBtn.disabled = true;
-            removeExifBtn.innerHTML = '⏳ 처리 중...';
+            removeExifBtn.innerHTML = '처리 중...';
             
             try {
                 await removeExif();
@@ -1534,7 +1739,7 @@
             } catch (error) {
                 showToast('처리 중 오류가 발생했습니다: ' + error.message, 'error');
                 removeExifBtn.disabled = false;
-                removeExifBtn.innerHTML = '🧹 메타데이터 제거';
+                removeExifBtn.innerHTML = '메타데이터 제거';
             }
         });
 
@@ -1567,7 +1772,7 @@
                         document.getElementById('cleanedSize').textContent = formatBytes(blob.size);
                         resultSection.classList.add('visible');
                         
-                        removeExifBtn.innerHTML = '✅ 제거 완료';
+                        removeExifBtn.innerHTML = '제거 완료';
                         
                         resolve();
                     }, mimeType, quality);
@@ -1620,7 +1825,7 @@
             // Reset buttons
             clearBtn.disabled = true;
             removeExifBtn.disabled = true;
-            removeExifBtn.innerHTML = '🧹 메타데이터 제거';
+            removeExifBtn.innerHTML = '메타데이터 제거';
             
             // Reset file input
             imageInput.value = '';
@@ -1639,9 +1844,9 @@
             toast.className = `toast ${type}`;
             
             const icons = {
-                success: '✅',
-                error: '❌',
-                warning: '⚠️'
+                success: 'OK',
+                error: 'ERR',
+                warning: 'WARN'
             };
             
             toast.innerHTML = `
@@ -1660,4 +1865,3 @@
     </script>
 </body>
 </html>
-
