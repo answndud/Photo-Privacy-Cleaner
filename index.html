@@ -1091,13 +1091,13 @@
                             초기화
                         </button>
                         <button class="btn btn-danger" id="removeExifBtn" disabled>
-                            안전한 복사본 만들기
+                            메타데이터 삭제
                         </button>
                     </div>
 
                     <div class="result-section" id="resultSection">
                         <div class="result-header">
-                            <span class="result-title">안전한 복사본 생성 완료</span>
+                            <span class="result-title">메타데이터 삭제 완료</span>
                         </div>
                         <div class="result-comparison">
                             <div class="comparison-item">
@@ -1110,7 +1110,7 @@
                             </div>
                         </div>
                         <button class="btn btn-primary" id="downloadBtn">
-                            정리된 이미지 다운로드
+                            삭제된 이미지 다운로드
                         </button>
                     </div>
                 </div>
@@ -1386,7 +1386,7 @@
                     currentImage = null;
                     updateImageInfo(file, { width: '-', height: '-' });
                     extractExifData(file);
-                    removeExifBtn.textContent = '정리 불가';
+                    removeExifBtn.textContent = '삭제 불가';
                     removeExifBtn.disabled = true;
                 };
                 img.src = e.target.result;
@@ -1475,10 +1475,10 @@
             noExifFound.style.display = 'block';
             exifSection.classList.remove('visible');
             if (currentImage) {
-                removeExifBtn.textContent = '안전한 복사본 만들기';
+                removeExifBtn.textContent = '메타데이터 삭제';
                 removeExifBtn.disabled = false;
             } else {
-                removeExifBtn.textContent = '정리 불가';
+                removeExifBtn.textContent = '삭제 불가';
                 removeExifBtn.disabled = true;
             }
         }
@@ -2042,11 +2042,11 @@
             
             try {
                 await removeExif();
-                showToast('안전한 복사본이 생성되었습니다!', 'success');
+                showToast('메타데이터가 삭제되었습니다!', 'success');
             } catch (error) {
                 showToast('처리 중 오류가 발생했습니다: ' + error.message, 'error');
                 removeExifBtn.disabled = false;
-                removeExifBtn.textContent = '안전한 복사본 만들기';
+                removeExifBtn.textContent = '메타데이터 삭제';
             }
         });
 
@@ -2079,7 +2079,7 @@
                         document.getElementById('cleanedSize').textContent = formatBytes(blob.size);
                         resultSection.classList.add('visible');
                         
-                        removeExifBtn.textContent = '복사본 생성 완료';
+                        removeExifBtn.textContent = '메타데이터 삭제 완료';
                         
                         resolve();
                     }, mimeType, quality);
@@ -2132,7 +2132,7 @@
             // Reset buttons
             clearBtn.disabled = true;
             removeExifBtn.disabled = true;
-            removeExifBtn.textContent = '안전한 복사본 만들기';
+            removeExifBtn.textContent = '메타데이터 삭제';
             
             // Reset file input
             imageInput.value = '';
