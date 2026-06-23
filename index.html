@@ -749,28 +749,14 @@
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
+            justify-content: flex-start;
+            gap: 0;
             cursor: pointer;
             user-select: none;
         }
 
         .info-section-title:hover {
             color: var(--accent-primary);
-        }
-
-        .info-section-title-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 1.5rem;
-            height: 1.5rem;
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            flex: 0 0 auto;
         }
 
         .info-list {
@@ -912,7 +898,6 @@
         .no-exif-icon,
         .result-icon,
         .info-item-icon,
-        .info-section-title span,
         .exif-category-title span {
             display: none;
         }
@@ -1271,8 +1256,7 @@
         <!-- Info Section -->
         <div class="info-section">
             <div class="info-section-title" id="infoSectionToggle" role="button" tabindex="0" aria-expanded="false">
-                <span>이미지 메타데이터란?</span>
-                <span class="info-section-title-icon" id="infoSectionIcon" aria-hidden="true">▸</span>
+                <span class="info-section-title-label">이미지 메타데이터란?</span>
             </div>
             <div class="info-list">
                 <div class="info-item">
@@ -1330,7 +1314,6 @@
         const themeToggle = document.getElementById('themeToggle');
         const infoSection = document.querySelector('.info-section');
         const infoSectionToggle = document.getElementById('infoSectionToggle');
-        const infoSectionIcon = document.getElementById('infoSectionIcon');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
@@ -1365,15 +1348,9 @@
         if (infoSection && infoSectionToggle) {
             infoSection.classList.add('collapsed');
             infoSectionToggle.setAttribute('aria-expanded', 'false');
-            if (infoSectionIcon) {
-                infoSectionIcon.textContent = '▸';
-            }
             const toggleInfoSection = () => {
                 const collapsed = infoSection.classList.toggle('collapsed');
                 infoSectionToggle.setAttribute('aria-expanded', String(!collapsed));
-                if (infoSectionIcon) {
-                    infoSectionIcon.textContent = collapsed ? '▸' : '▾';
-                }
             };
             infoSectionToggle.addEventListener('click', toggleInfoSection);
             infoSectionToggle.addEventListener('keydown', (event) => {
