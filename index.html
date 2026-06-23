@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EXIF Viewer & Remover</title>
+    <title>Photo Privacy Cleaner</title>
     <script src="./vendor/exifr.full.umd.js"></script>
     <style>
         :root {
@@ -1040,7 +1040,7 @@
     <div class="container">
         <header>
             <div class="logo">
-                <h1>EXIF Viewer & Remover</h1>
+                <h1>Photo Privacy Cleaner</h1>
             </div>
             <p class="subtitle">
                 이미지에 숨겨진 메타데이터를 확인하고 안전하게 제거하세요. <br>
@@ -1091,13 +1091,13 @@
                             초기화
                         </button>
                         <button class="btn btn-danger" id="removeExifBtn" disabled>
-                            메타데이터 제거
+                            안전한 복사본 만들기
                         </button>
                     </div>
 
                     <div class="result-section" id="resultSection">
                         <div class="result-header">
-                            <span class="result-title">메타데이터 제거 완료</span>
+                            <span class="result-title">안전한 복사본 생성 완료</span>
                         </div>
                         <div class="result-comparison">
                             <div class="comparison-item">
@@ -1279,7 +1279,7 @@
 
     <script>
         // ============================================
-        // EXIF Viewer & Remover - Main Application
+        // Photo Privacy Cleaner - Main Application
         // ============================================
 
         // State
@@ -1377,6 +1377,16 @@
                     updateImageInfo(file, img);
                     extractExifData(file);
                 };
+                img.onerror = () => {
+                    showToast('이 이미지 형식은 미리보기를 지원하지 않습니다.', 'error');
+                    currentImage = null;
+                    exifData = null;
+                    noExif.style.display = 'block';
+                    noExifFound.style.display = 'none';
+                    exifSection.classList.remove('visible');
+                    removeExifBtn.textContent = '안전한 복사본 만들기';
+                    removeExifBtn.disabled = false;
+                };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
@@ -1452,8 +1462,8 @@
             noExif.style.display = 'none';
             noExifFound.style.display = 'block';
             exifSection.classList.remove('visible');
-            removeExifBtn.textContent = '메타데이터 없음';
-            removeExifBtn.disabled = true;
+            removeExifBtn.textContent = '안전한 복사본 만들기';
+            removeExifBtn.disabled = false;
         }
 
         function displayExifData(data) {
@@ -1708,8 +1718,12 @@
             const hasGPS = data.GPSLatitude && data.GPSLongitude;
             
             if (hasGPS) {
-                const lat = convertDMSToDD(data.GPSLatitude, data.GPSLatitudeRef);
-                const lng = convertDMSToDD(data.GPSLongitude, data.GPSLongitudeRef);
+                const lat = convertGPSValue(data.GPSLatitude, data.GPSLatitudeRef);
+                const lng = convertGPSValue(data.GPSLongitude, data.GPSLongitudeRef);
+                if (lat === null || lng === null) {
+                    gpsPreview.classList.remove('visible');
+                    return;
+                }
                 
                 document.getElementById('gpsLat').textContent = `${lat.toFixed(6)}° ${data.GPSLatitudeRef || 'N'}`;
                 document.getElementById('gpsLng').textContent = `${lng.toFixed(6)}° ${data.GPSLongitudeRef || 'E'}`;
@@ -1724,24 +1738,32 @@
             }
         }
 
-        function convertDMSToDD(dms, ref) {
-            // DMS = [degrees, minutes, seconds]
-            if (!dms || dms.length < 3) return 0;
-            
-            const parts = dms.map(part => {
+        function convertGPSValue(value, ref) {
+            if (typeof value === 'number') {
+                return (ref === 'S' || ref === 'W') ? -Math.abs(value) : value;
+            }
+
+            if (!Array.isArray(value) || value.length < 3) return null;
+
+            const parts = value.map(part => {
                 if (part && typeof part === 'object' && part.numerator !== undefined && part.denominator !== undefined) {
                     return part.numerator / part.denominator;
                 }
                 return Number(part);
             });
 
-            let dd = parts[0] + parts[1]/60 + parts[2]/3600;
-            
-            if (ref === 'S' || ref === 'W') {
-                dd = -dd;
-            }
-            
+            if (parts.some(part => !Number.isFinite(part))) return null;
+
+            let dd = parts[0] + parts[1] / 60 + parts[2] / 3600;
+            if (ref === 'S' || ref === 'W') dd = -dd;
             return dd;
+        }
+
+        function escapeMarkdownCell(value) {
+            return String(value ?? '')
+                .replace(/\|/g, '\\|')
+                .replace(/\r?\n/g, ' ')
+                .trim();
         }
 
         function displayAllExif(data) {
@@ -1808,9 +1830,9 @@
             md += `## 파일 정보\n\n`;
             md += `| 항목 | 값 |\n`;
             md += `|------|----|\n`;
-            md += `| 파일명 | \`${file.name}\` |\n`;
-            md += `| 파일 크기 | ${formatBytes(file.size)} |\n`;
-            md += `| 파일 형식 | ${file.type} |\n`;
+            md += `| 파일명 | \`${escapeMarkdownCell(file.name)}\` |\n`;
+            md += `| 파일 크기 | ${escapeMarkdownCell(formatBytes(file.size))} |\n`;
+            md += `| 파일 형식 | ${escapeMarkdownCell(file.type)} |\n`;
             if (currentImage) {
                 md += `| 해상도 | ${currentImage.width} × ${currentImage.height} px |\n`;
             }
@@ -1829,7 +1851,7 @@
                 md += `| 항목 | 값 |\n`;
                 md += `|------|----|\n`;
                 cameraData.forEach(f => {
-                    md += `| ${f.label} | ${data[f.key]} |\n`;
+                md += `| ${escapeMarkdownCell(f.label)} | ${escapeMarkdownCell(data[f.key])} |\n`;
                 });
                 md += `\n`;
             }
@@ -1846,7 +1868,7 @@
                 md += `| 항목 | 값 |\n`;
                 md += `|------|----|\n`;
                 dateData.forEach(f => {
-                    md += `| ${f.label} | ${formatExifDate(data[f.key])} |\n`;
+                    md += `| ${escapeMarkdownCell(f.label)} | ${escapeMarkdownCell(formatExifDate(data[f.key]))} |\n`;
                 });
                 md += `\n`;
             }
@@ -1872,7 +1894,7 @@
                     if (f.format) {
                         value = f.format(value);
                     }
-                    md += `| ${f.label} | ${value} |\n`;
+                    md += `| ${escapeMarkdownCell(f.label)} | ${escapeMarkdownCell(value)} |\n`;
                 });
                 md += `\n`;
             }
@@ -1895,7 +1917,7 @@
                 md += `|------|----|\n`;
                 xmpData.forEach(f => {
                     const value = f.format ? f.format(data[f.key]) : data[f.key];
-                    md += `| ${f.label} | ${String(value).replace(/\|/g, '\\|').replace(/\n/g, ' ')} |\n`;
+                    md += `| ${escapeMarkdownCell(f.label)} | ${escapeMarkdownCell(value)} |\n`;
                 });
                 md += `\n`;
             }
@@ -1939,7 +1961,7 @@
                 md += `| 항목 | 값 |\n`;
                 md += `|------|----|\n`;
                 iccData.forEach(f => {
-                    md += `| ${f.label} | ${String(data[f.key]).replace(/\|/g, '\\|').replace(/\n/g, ' ')} |\n`;
+                    md += `| ${escapeMarkdownCell(f.label)} | ${escapeMarkdownCell(data[f.key])} |\n`;
                 });
                 md += `\n`;
             }
@@ -1953,10 +1975,10 @@
                 md += `> 경고: 이 이미지에는 촬영 위치가 포함되어 있습니다.\n\n`;
                 md += `| 항목 | 값 |\n`;
                 md += `|------|----|\n`;
-                md += `| 위도 (Latitude) | ${lat.toFixed(6)}° ${data.GPSLatitudeRef || 'N'} |\n`;
-                md += `| 경도 (Longitude) | ${lng.toFixed(6)}° ${data.GPSLongitudeRef || 'E'} |\n`;
+                md += `| 위도 (Latitude) | ${escapeMarkdownCell(`${lat.toFixed(6)}° ${data.GPSLatitudeRef || 'N'}`)} |\n`;
+                md += `| 경도 (Longitude) | ${escapeMarkdownCell(`${lng.toFixed(6)}° ${data.GPSLongitudeRef || 'E'}`)} |\n`;
                 if (data.GPSAltitude) {
-                    md += `| 고도 (Altitude) | ${data.GPSAltitude}m |\n`;
+                    md += `| 고도 (Altitude) | ${escapeMarkdownCell(`${data.GPSAltitude}m`)} |\n`;
                 }
                 md += `\n`;
                 md += `[Google Maps에서 보기](https://www.google.com/maps?q=${lat},${lng})\n\n`;
@@ -1973,14 +1995,13 @@
             Object.entries(data).forEach(([key, value]) => {
                 if (value !== undefined && value !== null && value !== '') {
                     const displayValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
-                    const escapedValue = displayValue.replace(/\|/g, '\\|').replace(/\n/g, ' ');
                     const marker = sensitiveKeys.includes(key) ? ' *' : '';
-                    md += `| ${key}${marker} | ${escapedValue} |\n`;
+                    md += `| ${escapeMarkdownCell(key)}${marker} | ${escapeMarkdownCell(displayValue)} |\n`;
                 }
             });
             
             md += `\n---\n\n`;
-            md += `*이 파일은 [EXIF Viewer & Remover](https://github.com)에서 생성되었습니다.*\n`;
+            md += `*이 파일은 [Photo Privacy Cleaner](https://github.com)에서 생성되었습니다.*\n`;
             
             return md;
         }
@@ -1996,11 +2017,11 @@
             
             try {
                 await removeExif();
-                showToast('메타데이터가 성공적으로 제거되었습니다!', 'success');
+                showToast('안전한 복사본이 생성되었습니다!', 'success');
             } catch (error) {
                 showToast('처리 중 오류가 발생했습니다: ' + error.message, 'error');
                 removeExifBtn.disabled = false;
-                removeExifBtn.textContent = '메타데이터 제거';
+                removeExifBtn.textContent = '안전한 복사본 만들기';
             }
         });
 
@@ -2033,7 +2054,7 @@
                         document.getElementById('cleanedSize').textContent = formatBytes(blob.size);
                         resultSection.classList.add('visible');
                         
-                        removeExifBtn.textContent = '제거 완료';
+                        removeExifBtn.textContent = '복사본 생성 완료';
                         
                         resolve();
                     }, mimeType, quality);
@@ -2086,7 +2107,7 @@
             // Reset buttons
             clearBtn.disabled = true;
             removeExifBtn.disabled = true;
-            removeExifBtn.textContent = '메타데이터 제거';
+            removeExifBtn.textContent = '안전한 복사본 만들기';
             
             // Reset file input
             imageInput.value = '';
