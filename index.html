@@ -1178,6 +1178,38 @@
                             <div class="exif-grid" id="settingsGrid"></div>
                         </div>
 
+                        <!-- XMP -->
+                        <div class="exif-category" id="xmpCategory">
+                            <div class="exif-category-title">
+                                <span></span> XMP 편집 정보
+                            </div>
+                            <div class="exif-grid" id="xmpGrid"></div>
+                        </div>
+
+                        <!-- IPTC -->
+                        <div class="exif-category" id="iptcCategory">
+                            <div class="exif-category-title">
+                                <span></span> IPTC 설명 정보
+                            </div>
+                            <div class="exif-grid" id="iptcGrid"></div>
+                        </div>
+
+                        <!-- ICC -->
+                        <div class="exif-category" id="iccCategory">
+                            <div class="exif-category-title">
+                                <span></span> ICC 색상 프로파일
+                            </div>
+                            <div class="exif-grid" id="iccGrid"></div>
+                        </div>
+
+                        <!-- Format -->
+                        <div class="exif-category" id="formatCategory">
+                            <div class="exif-category-title">
+                                <span></span> 포맷 메타데이터
+                            </div>
+                            <div class="exif-grid" id="formatGrid"></div>
+                        </div>
+
                         <!-- EXIF Actions -->
                         <div class="exif-actions">
                             <button class="btn btn-secondary" id="downloadExifMdBtn">
@@ -1489,6 +1521,96 @@
             });
             document.getElementById('settingsCategory').style.display = hasSettingsData ? 'block' : 'none';
 
+            // XMP / Editing Info
+            const xmpGrid = document.getElementById('xmpGrid');
+            xmpGrid.replaceChildren();
+            const xmpFields = [
+                { key: 'xmp', label: 'XMP 원본', format: summarizeXmp },
+                { key: 'CreatorTool', label: '작성 도구' },
+                { key: 'Label', label: '레이블' },
+                { key: 'Rating', label: '평점' },
+                { key: 'Description', label: '설명' },
+                { key: 'Title', label: '제목' },
+                { key: 'Subject', label: '주제' },
+                { key: 'Rights', label: '권리' }
+            ];
+            let hasXmpData = false;
+            xmpFields.forEach(field => {
+                if (data[field.key] !== undefined && data[field.key] !== null && data[field.key] !== '') {
+                    hasXmpData = true;
+                    const value = field.format ? field.format(data[field.key]) : data[field.key];
+                    xmpGrid.appendChild(createExifItem(field.label, value));
+                }
+            });
+            document.getElementById('xmpCategory').style.display = hasXmpData ? 'block' : 'none';
+
+            // IPTC
+            const iptcGrid = document.getElementById('iptcGrid');
+            iptcGrid.replaceChildren();
+            const iptcFields = [
+                { key: 'headline', label: '헤드라인' },
+                { key: 'caption', label: '캡션' },
+                { key: 'credit', label: '크레딧' },
+                { key: 'byline', label: '기자/작성자' },
+                { key: 'bylineTitle', label: '작성자 직함' },
+                { key: 'keywords', label: '키워드', format: formatListValue },
+                { key: 'category', label: '카테고리' },
+                { key: 'captionWriter', label: '캡션 작성자' }
+            ];
+            let hasIptcData = false;
+            iptcFields.forEach(field => {
+                if (data[field.key] !== undefined && data[field.key] !== null && data[field.key] !== '') {
+                    hasIptcData = true;
+                    const value = field.format ? field.format(data[field.key]) : data[field.key];
+                    iptcGrid.appendChild(createExifItem(field.label, value));
+                }
+            });
+            document.getElementById('iptcCategory').style.display = hasIptcData ? 'block' : 'none';
+
+            // ICC / Color Profile
+            const iccGrid = document.getElementById('iccGrid');
+            iccGrid.replaceChildren();
+            const iccFields = [
+                { key: 'ProfileDescription', label: '프로파일 설명' },
+                { key: 'ProfileCMMType', label: 'CMM 타입' },
+                { key: 'ProfileClass', label: '프로파일 클래스' },
+                { key: 'ColorSpaceData', label: '색상 공간' },
+                { key: 'RenderingIntent', label: '렌더링 인텐트' },
+                { key: 'DeviceModel', label: '디바이스 모델' },
+                { key: 'DeviceManufacturer', label: '제조사' }
+            ];
+            let hasIccData = false;
+            iccFields.forEach(field => {
+                if (data[field.key] !== undefined && data[field.key] !== null && data[field.key] !== '') {
+                    hasIccData = true;
+                    iccGrid.appendChild(createExifItem(field.label, data[field.key]));
+                }
+            });
+            document.getElementById('iccCategory').style.display = hasIccData ? 'block' : 'none';
+
+            // Format-specific metadata
+            const formatGrid = document.getElementById('formatGrid');
+            formatGrid.replaceChildren();
+            const formatFields = [
+                { key: 'JFIFVersion', label: 'JFIF 버전', format: formatArrayValue },
+                { key: 'ResolutionUnit', label: '해상도 단위' },
+                { key: 'XResolution', label: '가로 해상도' },
+                { key: 'YResolution', label: '세로 해상도' },
+                { key: 'ColorType', label: '컬러 타입' },
+                { key: 'BitDepth', label: '비트 깊이' },
+                { key: 'ImageWidth', label: '이미지 너비' },
+                { key: 'ImageHeight', label: '이미지 높이' }
+            ];
+            let hasFormatData = false;
+            formatFields.forEach(field => {
+                if (data[field.key] !== undefined && data[field.key] !== null && data[field.key] !== '') {
+                    hasFormatData = true;
+                    const value = field.format ? field.format(data[field.key]) : data[field.key];
+                    formatGrid.appendChild(createExifItem(field.label, value));
+                }
+            });
+            document.getElementById('formatCategory').style.display = hasFormatData ? 'block' : 'none';
+
             // GPS Data
             displayGPSData(data);
 
@@ -1550,10 +1672,36 @@
             return value === 0 ? '자동' : '수동';
         }
 
+        function formatListValue(value) {
+            if (Array.isArray(value)) {
+                return value.map(item => String(item)).join(', ');
+            }
+            return String(value);
+        }
+
+        function formatArrayValue(value) {
+            if (Array.isArray(value)) {
+                return value.map(item => String(item)).join('.');
+            }
+            return String(value);
+        }
+
         function formatNumber(value, digits = 1) {
             const num = Number(value);
             if (!Number.isFinite(num)) return String(value);
             return num.toFixed(digits);
+        }
+
+        function summarizeXmp(value) {
+            if (typeof value === 'string') {
+                const compact = value.replace(/\s+/g, ' ').trim();
+                return compact.length > 160 ? `${compact.slice(0, 160)}…` : compact;
+            }
+            if (value && typeof value === 'object') {
+                const keys = Object.keys(value);
+                return keys.length ? `${keys.length}개 필드` : '비어 있음';
+            }
+            return String(value);
         }
 
         function displayGPSData(data) {
@@ -1601,7 +1749,7 @@
             tbody.replaceChildren();
             
             const sensitiveKeys = ['GPSLatitude', 'GPSLongitude', 'GPSLatitudeRef', 'GPSLongitudeRef', 
-                                   'DateTime', 'DateTimeOriginal', 'DateTimeDigitized'];
+                                   'DateTime', 'DateTimeOriginal', 'DateTimeDigitized', 'xmp', 'Description', 'Title', 'Subject', 'Rights'];
             
             Object.entries(data).forEach(([key, value]) => {
                 if (value !== undefined && value !== null && value !== '') {
@@ -1728,7 +1876,74 @@
                 });
                 md += `\n`;
             }
-            
+
+            // XMP Info
+            const xmpFields = [
+                { key: 'xmp', label: 'XMP 원본', format: summarizeXmp },
+                { key: 'CreatorTool', label: '작성 도구' },
+                { key: 'Label', label: '레이블' },
+                { key: 'Rating', label: '평점' },
+                { key: 'Description', label: '설명' },
+                { key: 'Title', label: '제목' },
+                { key: 'Subject', label: '주제' },
+                { key: 'Rights', label: '권리' }
+            ];
+            const xmpData = xmpFields.filter(f => data[f.key] !== undefined && data[f.key] !== null && data[f.key] !== '');
+            if (xmpData.length > 0) {
+                md += `## XMP 편집 정보\n\n`;
+                md += `| 항목 | 값 |\n`;
+                md += `|------|----|\n`;
+                xmpData.forEach(f => {
+                    const value = f.format ? f.format(data[f.key]) : data[f.key];
+                    md += `| ${f.label} | ${String(value).replace(/\|/g, '\\|').replace(/\n/g, ' ')} |\n`;
+                });
+                md += `\n`;
+            }
+
+            // IPTC Info
+            const iptcFields = [
+                { key: 'headline', label: '헤드라인' },
+                { key: 'caption', label: '캡션' },
+                { key: 'credit', label: '크레딧' },
+                { key: 'byline', label: '기자/작성자' },
+                { key: 'bylineTitle', label: '작성자 직함' },
+                { key: 'keywords', label: '키워드', format: formatListValue },
+                { key: 'category', label: '카테고리' },
+                { key: 'captionWriter', label: '캡션 작성자' }
+            ];
+            const iptcData = iptcFields.filter(f => data[f.key] !== undefined && data[f.key] !== null && data[f.key] !== '');
+            if (iptcData.length > 0) {
+                md += `## IPTC 설명 정보\n\n`;
+                md += `| 항목 | 값 |\n`;
+                md += `|------|----|\n`;
+                iptcData.forEach(f => {
+                    const value = f.format ? f.format(data[f.key]) : data[f.key];
+                    md += `| ${f.label} | ${String(value).replace(/\|/g, '\\|').replace(/\n/g, ' ')} |\n`;
+                });
+                md += `\n`;
+            }
+
+            // ICC Info
+            const iccFields = [
+                { key: 'ProfileDescription', label: '프로파일 설명' },
+                { key: 'ProfileCMMType', label: 'CMM 타입' },
+                { key: 'ProfileClass', label: '프로파일 클래스' },
+                { key: 'ColorSpaceData', label: '색상 공간' },
+                { key: 'RenderingIntent', label: '렌더링 인텐트' },
+                { key: 'DeviceModel', label: '디바이스 모델' },
+                { key: 'DeviceManufacturer', label: '제조사' }
+            ];
+            const iccData = iccFields.filter(f => data[f.key] !== undefined && data[f.key] !== null && data[f.key] !== '');
+            if (iccData.length > 0) {
+                md += `## ICC 색상 프로파일\n\n`;
+                md += `| 항목 | 값 |\n`;
+                md += `|------|----|\n`;
+                iccData.forEach(f => {
+                    md += `| ${f.label} | ${String(data[f.key]).replace(/\|/g, '\\|').replace(/\n/g, ' ')} |\n`;
+                });
+                md += `\n`;
+            }
+
             // GPS Info
             if (data.GPSLatitude && data.GPSLongitude) {
                 const lat = convertDMSToDD(data.GPSLatitude, data.GPSLatitudeRef);
@@ -1753,7 +1968,7 @@
             md += `|------|----|\n`;
             
             const sensitiveKeys = ['GPSLatitude', 'GPSLongitude', 'GPSLatitudeRef', 'GPSLongitudeRef', 
-                                   'DateTime', 'DateTimeOriginal', 'DateTimeDigitized'];
+                                   'DateTime', 'DateTimeOriginal', 'DateTimeDigitized', 'xmp', 'Description', 'Title', 'Subject', 'Rights'];
             
             Object.entries(data).forEach(([key, value]) => {
                 if (value !== undefined && value !== null && value !== '') {

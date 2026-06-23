@@ -1,6 +1,6 @@
 # 📷 EXIF Viewer & Remover - 기술 문서
 
-이 문서는 EXIF 메타데이터 뷰어 및 제거기의 기술적 구현 세부사항을 설명합니다. EXIF 파일 형식의 구조, 메타데이터 파싱 방법, Canvas API를 통한 메타데이터 제거 원리 등 핵심 기술들을 다룹니다.
+이 문서는 이미지 메타데이터 뷰어 및 정리기의 기술적 구현 세부사항을 설명합니다. EXIF 파일 형식의 구조, XMP/IPTC/ICC 확장 메타데이터 파싱, Canvas API를 통한 메타데이터 정리 원리 등 핵심 기술들을 다룹니다.
 
 ---
 
@@ -11,11 +11,12 @@
 3. [주요 EXIF 태그](#3-주요-exif-태그)
 4. [GPS 데이터 처리](#4-gps-데이터-처리)
 5. [exifr 라이브러리 활용](#5-exifr-라이브러리-활용)
-6. [Canvas를 통한 메타데이터 제거](#6-canvas를-통한-메타데이터-제거)
-7. [파일 형식별 처리](#7-파일-형식별-처리)
-8. [프라이버시 고려사항](#8-프라이버시-고려사항)
-9. [성능 최적화](#9-성능-최적화)
-10. [한계점 및 개선 방향](#10-한계점-및-개선-방향)
+6. [XMP / IPTC / ICC 처리](#6-xmp--iptc--icc-처리)
+7. [Canvas를 통한 메타데이터 제거](#7-canvas를-통한-메타데이터-제거)
+8. [파일 형식별 처리](#8-파일-형식별-처리)
+9. [프라이버시 고려사항](#9-프라이버시-고려사항)
+10. [성능 최적화](#10-성능-최적화)
+11. [한계점 및 개선 방향](#11-한계점-및-개선-방향)
 
 ---
 
@@ -453,6 +454,54 @@ function interpretFlash(flashValue) {
     return flashModes[flashValue] || `알 수 없음 (0x${flashValue.toString(16)})`;
 }
 ```
+
+---
+
+## 6. XMP / IPTC / ICC 처리
+
+`exifr.parse(file, true)`는 EXIF 외에도 XMP, IPTC, ICC, JFIF, PNG IHDR 같은 확장 메타데이터를 함께 반환할 수 있습니다. 이 프로젝트는 그 결과를 카테고리별로 분리해 보여줍니다.
+
+### 6.1 XMP
+
+XMP는 편집 도구와 워크플로 정보를 담는 메타데이터입니다. Lightroom, Photoshop, 카메라 앱, 에디터가 남긴 흔적이 여기에 들어갈 수 있습니다.
+
+대표적으로 다음 값을 보여줍니다.
+
+- `CreatorTool`
+- `Label`
+- `Rating`
+- `Description`
+- `Title`
+- `Subject`
+- `Rights`
+
+### 6.2 IPTC
+
+IPTC는 사진 설명, 캡션, 키워드, 저자 정보를 담는 데 자주 쓰입니다.
+
+대표적으로 다음 값을 보여줍니다.
+
+- `headline`
+- `caption`
+- `credit`
+- `byline`
+- `keywords`
+- `category`
+- `captionWriter`
+
+### 6.3 ICC
+
+ICC 프로파일은 색상 재현을 위한 정보입니다. 개인정보는 아니지만, 색상 정확도와 편집 워크플로 판단에 유용합니다.
+
+대표적으로 다음 값을 보여줍니다.
+
+- `ProfileDescription`
+- `ProfileCMMType`
+- `ProfileClass`
+- `ColorSpaceData`
+- `RenderingIntent`
+- `DeviceModel`
+- `DeviceManufacturer`
 
 ---
 
