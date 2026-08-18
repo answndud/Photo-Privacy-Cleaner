@@ -30,7 +30,7 @@
             --shadow-glow: 0 0 30px rgba(88, 166, 255, 0.15);
         }
 
-        :root {
+        [data-theme="light"] {
             --bg-primary: #ffffff;
             --bg-secondary: #f6f8fa;
             --bg-tertiary: #eaeef2;
@@ -86,7 +86,76 @@
             margin: 0 auto;
             padding: 2rem;
         }
-/* Main Grid */
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-top: 1rem;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: var(--shadow-glow);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-primary);
+        }
+
+        
+
+        /* Main Grid */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -763,7 +832,7 @@
         }
 
         /* Minimal light interface */
-        :root, :root {
+        :root, [data-theme="light"] {
             --bg-primary: #f7f8f8;
             --bg-secondary: #f0f2f2;
             --bg-tertiary: #e7ebeb;
@@ -785,7 +854,29 @@
             --shadow-glow: 0 1px 2px rgba(17, 20, 22, 0.06);
         }
 
-body {
+        [data-theme="dark"] {
+            --bg-primary: #101314;
+            --bg-secondary: #171b1d;
+            --bg-tertiary: #202628;
+            --bg-card: rgba(24, 28, 30, 0.92);
+            --text-primary: #f2f4f4;
+            --text-secondary: #b4bdc1;
+            --text-muted: #7f8b91;
+            --accent-primary: #72d6c9;
+            --accent-secondary: #72d6c9;
+            --accent-glow: rgba(114, 214, 201, 0.08);
+            --warning: #e0b85f;
+            --warning-bg: #2a261b;
+            --error: #ffb4ab;
+            --error-bg: #2b1c1c;
+            --success: #8bd39a;
+            --success-bg: #172719;
+            --border: #30383c;
+            --border-hover: #465156;
+            --shadow-glow: 0 1px 2px rgba(0, 0, 0, 0.28);
+        }
+
+        body {
             line-height: 1.5;
         }
 
@@ -833,7 +924,26 @@ body {
             margin: 0;
             font-size: 0.86rem;
         }
-.main-grid {
+
+        .theme-toggle {
+            top: 16px;
+            right: 16px;
+            width: auto;
+            height: 34px;
+            min-width: 64px;
+            border-radius: 8px;
+            padding: 0 10px;
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+        }
+
+        .theme-toggle:hover {
+            transform: none;
+            border-color: var(--accent-primary);
+        }
+
+        .main-grid {
             gap: 14px;
         }
 
@@ -939,7 +1049,32 @@ body {
     </style>
     <!-- Minimal sharp visual system -->
     <style id="minimal-sharp-theme">
-html, body {
+        :root, [data-theme="light"], [data-theme="dark"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #ffffff;
+            --bg-card: #ffffff;
+            --bg-card-hover: #ffffff;
+            --bg-input: #ffffff;
+            --bg: #ffffff;
+            --panel: #ffffff;
+            --panel-strong: #ffffff;
+            --preview-bg: #ffffff;
+            --accent: #D2E0E5;
+            --accent-primary: #D2E0E5;
+            --accent-secondary: #D2E0E5;
+            --accent-light: #D2E0E5;
+            --accent-strong: #D2E0E5;
+            --accent-dim: #D2E0E5;
+            --primary: #D2E0E5;
+            --primary-color: #D2E0E5;
+            --gradient-accent: none;
+            --gradient-1: none;
+            --gradient-2: none;
+            --gradient-3: none;
+        }
+
+        html, body {
             background: #ffffff !important;
         }
 
@@ -964,7 +1099,42 @@ html, body {
     </style>
     <!-- Rational project palette -->
     <style id="rational-project-palette">
-html, body {
+        :root, [data-theme="light"], [data-theme="dark"] {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F7F8;
+            --bg-tertiary: #F5F7F8;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F5F7F8;
+            --bg-input: #EFF3F4;
+            --bg: #FFFFFF;
+            --panel: #FFFFFF;
+            --panel-strong: #F5F7F8;
+            --preview-bg: #F5F7F8;
+            --text-primary: #20292E;
+            --text-secondary: #68757B;
+            --text-muted: #68757B;
+            --border: #D9E1E4;
+            --border-color: #D9E1E4;
+            --border-hover: #6B8791;
+            --accent: #6B8791;
+            --accent-primary: #6B8791;
+            --accent-secondary: #4F6E78;
+            --accent-light: #F5F7F8;
+            --accent-strong: #4F6E78;
+            --accent-dim: #F5F7F8;
+            --primary: #6B8791;
+            --primary-color: #6B8791;
+            --success: #4C8066;
+            --warning: #9B753C;
+            --danger: #A65A5A;
+            --error: #A65A5A;
+            --gradient-accent: none;
+            --gradient-1: none;
+            --gradient-2: none;
+            --gradient-3: none;
+        }
+
+        html, body {
             background: #FFFFFF !important;
             color: #20292E !important;
         }
@@ -987,7 +1157,42 @@ html, body {
     </style>
     <!-- MarkdownPreview shared visual system -->
     <style id="markdown-preview-theme">
-html, body {
+        :root, [data-theme="light"], [data-theme="dark"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f6f8fa;
+            --bg-tertiary: #f6f8fa;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f6f8fa;
+            --bg-editor: #ffffff;
+            --bg-input: #f6f8fa;
+            --bg: #ffffff;
+            --panel: #ffffff;
+            --panel-strong: #f6f8fa;
+            --preview-bg: #f6f8fa;
+            --accent: #0969da;
+            --accent-primary: #0969da;
+            --accent-secondary: #0550ae;
+            --accent-light: #f6f8fa;
+            --accent-strong: #0550ae;
+            --primary: #0969da;
+            --primary-color: #0969da;
+            --text-primary: #24292f;
+            --text-secondary: #57606a;
+            --text-muted: #8c959f;
+            --border: #d0d7de;
+            --border-color: #d0d7de;
+            --border-hover: #0969da;
+            --code-bg: #f6f8fa;
+            --blockquote-border: #0969da;
+            --link-color: #0969da;
+            --table-border: #d0d7de;
+            --table-alt-bg: #f6f8fa;
+            --gradient-accent: linear-gradient(135deg, #0969da 0%, #0550ae 100%);
+            --shadow: 0 1px 2px rgba(27, 31, 36, 0.08);
+            --shadow-card: 0 1px 2px rgba(27, 31, 36, 0.08);
+        }
+
+        html, body {
             background: #ffffff !important;
             color: #24292f !important;
         }
@@ -1047,6 +1252,8 @@ html, body {
 </head>
 <body>
     <div class="toast-container" id="toastContainer"></div>
+
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">Light</button>
 
     <canvas id="canvas" style="display: none;"></canvas>
 
@@ -1314,10 +1521,39 @@ html, body {
         const clearBtn = document.getElementById('clearBtn');
         const removeExifBtn = document.getElementById('removeExifBtn');
         const downloadBtn = document.getElementById('downloadBtn');
+        const themeToggle = document.getElementById('themeToggle');
         const infoSection = document.querySelector('.info-section');
         const infoSectionToggle = document.getElementById('infoSectionToggle');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
+
+        // ============================================
+        // Theme Management
+        // ============================================
+        function initTheme() {
+            const legacyTheme = localStorage.getItem('exif-viewer-theme');
+            const savedTheme = localStorage.getItem('photo-privacy-cleaner-theme') || legacyTheme || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+            if (!localStorage.getItem('photo-privacy-cleaner-theme')) {
+                localStorage.setItem('photo-privacy-cleaner-theme', savedTheme);
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('photo-privacy-cleaner-theme', next);
+            updateThemeIcon(next);
+        }
+
+        function updateThemeIcon(theme) {
+            themeToggle.textContent = theme === 'dark' ? 'Dark' : 'Light';
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        initTheme();
 
         if (infoSection && infoSectionToggle) {
             infoSection.classList.add('collapsed');
