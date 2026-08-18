@@ -21,35 +21,13 @@
             --warning-bg: rgba(210, 153, 34, 0.1);
             --error: #f85149;
             --error-bg: rgba(248, 81, 73, 0.1);
-            --success: #3fb950;
-            --success-bg: rgba(63, 185, 80, 0.1);
+            --success: #1769aa;
+            --success-bg: rgba(23, 105, 170, 0.08);
             --border: #30363d;
             --border-hover: #484f58;
             --gradient-1: linear-gradient(135deg, #58a6ff 0%, #388bfd 100%);
             --gradient-2: linear-gradient(135deg, #f85149 0%, #da3633 100%);
             --shadow-glow: 0 0 30px rgba(88, 166, 255, 0.15);
-        }
-
-        [data-theme="light"] {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f6f8fa;
-            --bg-tertiary: #eaeef2;
-            --bg-card: #ffffff;
-            --text-primary: #1f2328;
-            --text-secondary: #59636e;
-            --text-muted: #8c959f;
-            --accent-primary: #0969da;
-            --accent-secondary: #0550ae;
-            --accent-glow: rgba(9, 105, 218, 0.15);
-            --warning: #9a6700;
-            --warning-bg: rgba(154, 103, 0, 0.1);
-            --error: #cf222e;
-            --error-bg: rgba(207, 34, 46, 0.1);
-            --success: #1a7f37;
-            --success-bg: rgba(26, 127, 55, 0.1);
-            --border: #d0d7de;
-            --border-hover: #afb8c1;
-            --shadow-glow: 0 4px 20px rgba(9, 105, 218, 0.1);
         }
 
         * {
@@ -65,20 +43,6 @@
             min-height: 100vh;
             line-height: 1.6;
             transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 0% 0%, var(--accent-glow) 0%, transparent 50%),
-                radial-gradient(ellipse at 100% 100%, rgba(248, 81, 73, 0.08) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
         }
 
         .container {
@@ -128,32 +92,6 @@
             max-width: 550px;
             margin: 0 auto;
         }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.1);
-            border-color: var(--accent-primary);
-        }
-
-        
 
         /* Main Grid */
         .main-grid {
@@ -832,7 +770,7 @@
         }
 
         /* Minimal light interface */
-        :root, [data-theme="light"] {
+        :root {
             --bg-primary: #f7f8f8;
             --bg-secondary: #f0f2f2;
             --bg-tertiary: #e7ebeb;
@@ -840,40 +778,18 @@
             --text-primary: #111416;
             --text-secondary: #4f5b61;
             --text-muted: #7b878c;
-            --accent-primary: #0f766e;
-            --accent-secondary: #0f766e;
-            --accent-glow: rgba(15, 118, 110, 0.08);
+            --accent-primary: #1769aa;
+            --accent-secondary: #0d4f86;
+            --accent-glow: rgba(23, 105, 170, 0.08);
             --warning: #9a6700;
             --warning-bg: #fff8e6;
             --error: #b42318;
             --error-bg: #fff1f0;
-            --success: #157f3b;
-            --success-bg: #eef9f0;
+            --success: #1769aa;
+            --success-bg: #eef5fb;
             --border: #d9dedf;
             --border-hover: #b8c2c6;
-            --shadow-glow: 0 1px 2px rgba(17, 20, 22, 0.06);
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: #101314;
-            --bg-secondary: #171b1d;
-            --bg-tertiary: #202628;
-            --bg-card: rgba(24, 28, 30, 0.92);
-            --text-primary: #f2f4f4;
-            --text-secondary: #b4bdc1;
-            --text-muted: #7f8b91;
-            --accent-primary: #72d6c9;
-            --accent-secondary: #72d6c9;
-            --accent-glow: rgba(114, 214, 201, 0.08);
-            --warning: #e0b85f;
-            --warning-bg: #2a261b;
-            --error: #ffb4ab;
-            --error-bg: #2b1c1c;
-            --success: #8bd39a;
-            --success-bg: #172719;
-            --border: #30383c;
-            --border-hover: #465156;
-            --shadow-glow: 0 1px 2px rgba(0, 0, 0, 0.28);
+            --shadow-glow: none;
         }
 
         body {
@@ -885,7 +801,7 @@
         }
 
         .container {
-            max-width: 1120px;
+            max-width: 1350px;
             padding: 28px 18px;
         }
 
@@ -923,24 +839,6 @@
             max-width: 620px;
             margin: 0;
             font-size: 0.86rem;
-        }
-
-        .theme-toggle {
-            top: 16px;
-            right: 16px;
-            width: auto;
-            height: 34px;
-            min-width: 64px;
-            border-radius: 8px;
-            padding: 0 10px;
-            font-size: 0.78rem;
-            color: var(--text-secondary);
-            background: var(--bg-card);
-        }
-
-        .theme-toggle:hover {
-            transform: none;
-            border-color: var(--accent-primary);
         }
 
         .main-grid {
@@ -1046,12 +944,166 @@
             padding: 22px;
             font-size: 0.78rem;
         }
+
+        /* Shared sharp light interface */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f3f5f5;
+            --bg-card: #ffffff;
+            --text-primary: #111516;
+            --text-secondary: #4b5659;
+            --text-muted: #778285;
+            --accent-primary: #1769aa;
+            --accent-secondary: #0d4f86;
+            --accent-glow: rgba(23, 105, 170, 0.12);
+            --success: #1769aa;
+            --success-bg: #eef5fb;
+            --border: #c8d0d1;
+            --border-color: #c8d0d1;
+            --border-hover: #1769aa;
+            --shadow-glow: none;
+        }
+
+        html,
+        body,
+        body *,
+        body *::before,
+        body *::after {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        body {
+            background: #ffffff !important;
+        }
+
+        body::before {
+            display: none !important;
+        }
+
+        .container {
+            max-width: 1350px;
+        }
+
+        .card,
+        .info-section,
+        .upload-zone,
+        .image-info,
+        .gps-preview,
+        .gps-coord,
+        .result-section,
+        .comparison-item,
+        .all-exif-toggle,
+        .info-item,
+        .exif-item,
+        .toast,
+        .btn {
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .logo-icon,
+        .card-header-icon,
+        .upload-icon,
+        .gps-warning-icon,
+        .no-exif-icon,
+        .result-icon,
+        .info-item-icon,
+        .exif-category-title span {
+            display: none !important;
+        }
+
+        h1 {
+            background: none !important;
+            color: var(--text-primary) !important;
+            -webkit-text-fill-color: currentColor !important;
+        }
+
+        .card,
+        .info-section,
+        .gps-coord,
+        .comparison-item,
+        .info-item,
+        .exif-item,
+        .image-info,
+        .all-exif-toggle {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border) !important;
+        }
+
+        .main-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+
+        .main-grid > .card {
+            min-width: 0;
+            height: 100%;
+        }
+
+        .upload-zone {
+            background: #ffffff !important;
+            border-width: 1px;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            background: var(--accent-glow) !important;
+            transform: none !important;
+            border-color: var(--accent-primary) !important;
+        }
+
+        .btn {
+            background-image: none !important;
+            transform: none !important;
+            transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease !important;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary) !important;
+            border-color: var(--accent-primary) !important;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent-secondary) !important;
+        }
+
+        .btn-danger {
+            background: transparent !important;
+            border: 1px solid var(--error) !important;
+            color: var(--error) !important;
+        }
+
+        .btn-secondary:hover,
+        .all-exif-toggle:hover,
+        .gps-link:hover {
+            border-color: var(--accent-primary) !important;
+            color: var(--accent-primary) !important;
+        }
+
+        input:focus,
+        .upload-zone:focus,
+        .all-exif-toggle:focus {
+            outline: none;
+            border-color: var(--accent-primary) !important;
+        }
+
+        .result-section {
+            background: var(--success-bg) !important;
+            border-color: var(--success) !important;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="toast-container" id="toastContainer"></div>
-
-    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">Light</button>
 
     <canvas id="canvas" style="display: none;"></canvas>
 
@@ -1319,39 +1371,10 @@
         const clearBtn = document.getElementById('clearBtn');
         const removeExifBtn = document.getElementById('removeExifBtn');
         const downloadBtn = document.getElementById('downloadBtn');
-        const themeToggle = document.getElementById('themeToggle');
         const infoSection = document.querySelector('.info-section');
         const infoSectionToggle = document.getElementById('infoSectionToggle');
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-
-        // ============================================
-        // Theme Management
-        // ============================================
-        function initTheme() {
-            const legacyTheme = localStorage.getItem('exif-viewer-theme');
-            const savedTheme = localStorage.getItem('photo-privacy-cleaner-theme') || legacyTheme || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
-            if (!localStorage.getItem('photo-privacy-cleaner-theme')) {
-                localStorage.setItem('photo-privacy-cleaner-theme', savedTheme);
-            }
-        }
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('photo-privacy-cleaner-theme', next);
-            updateThemeIcon(next);
-        }
-
-        function updateThemeIcon(theme) {
-            themeToggle.textContent = theme === 'dark' ? 'Dark' : 'Light';
-        }
-
-        themeToggle.addEventListener('click', toggleTheme);
-        initTheme();
 
         if (infoSection && infoSectionToggle) {
             infoSection.classList.add('collapsed');
